@@ -1,0 +1,3 @@
+# no-mistakes repo config. This repo has no CI workflows (it holds a skill, docs and a static
+# sample), so the CI step treats zero registered checks as passed.
+no_ci: true
