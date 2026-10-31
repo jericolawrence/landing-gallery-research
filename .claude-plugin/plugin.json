@@ -1,0 +1,10 @@
+{
+  "name": "landing-gallery-research",
+  "version": "0.1.0",
+  "description": "Evidence-led landing page and marketing site research through Landing Gallery: interview, search, 4-5 references, 3 playable demos, then pick a direction",
+  "author": {
+    "name": "Jerico Lawrence"
+  },
+  "repository": "https://github.com/jericolawrence/landing-gallery-research",
+  "license": "MIT"
+}

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing demos</title>
+<style>
+  :root {
+    --bg: #faf9f6; --surface: #fff; --ink: #1b1a17; --muted: #6b675e; --line: #e4e0d6;
+    --accent: #1b1a17; --accent-ink: #fff; --tint: #f1ede3; --focus: #2f6fed;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 1rem/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .switcher { position: sticky; top: 0; z-index: 2; display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; padding: 0.75rem 1rem; background: var(--ink); color: #fff; font-size: 0.875rem; }
+  .switcher strong { margin-right: 0.5rem; }
+  .switcher button { font: inherit; padding: 0.375rem 0.75rem; border-radius: 62.5rem; border: 1px solid #ffffff55; background: transparent; color: #fff; cursor: pointer; min-height: 2.75rem; }
+  .switcher button[aria-pressed="true"] { background: #fff; color: var(--ink); }
+  .switcher .note { margin-left: auto; opacity: 0.7; }
+  main { max-width: 72rem; margin: 0 auto; padding: 3rem 1rem 4rem; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; margin: 0 0 0.75rem; letter-spacing: -0.02em; text-wrap: balance; }
+  .lede { color: var(--muted); max-width: 36rem; margin: 0 0 2.5rem; }
+  .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 1rem; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+  .card.featured { border-color: var(--ink); box-shadow: 0 0.25rem 1.5rem #0000000f; }
+  .card h2 { font-size: 1.25rem; margin: 0; }
+  .price { font-size: 2.25rem; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .price small { font-size: 0.875rem; font-weight: 400; color: var(--muted); }
+  .who { background: var(--tint); border-radius: 0.5rem; padding: 0.75rem; font-size: 0.875rem; }
+  .who b { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 0.25rem; }
+  .first-hire { font-size: 0.875rem; border-top: 1px solid var(--line); padding-top: 0.75rem; font-variant-numeric: tabular-nums; }
+  ul { margin: 0; padding-left: 1.125rem; font-size: 0.875rem; color: var(--muted); }
+  .cta { margin-top: auto; display: inline-flex; justify-content: center; align-items: center; min-height: 2.75rem; padding: 0 1.25rem; border-radius: 62.5rem; background: var(--accent); color: var(--accent-ink); text-decoration: none; font-weight: 500; border: 1px solid var(--accent); }
+  .cta.ghost { background: transparent; color: var(--ink); }
+  .toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 62.5rem; padding: 0.25rem; background: var(--surface); margin-bottom: 0.5rem; }
+  .toggle button { font: inherit; font-size: 0.875rem; border: 0; background: transparent; padding: 0.5rem 1rem; border-radius: 62.5rem; cursor: pointer; min-height: 2.75rem; }
+  .toggle button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .hint { font-size: 0.8125rem; color: var(--muted); margin: 0 0 2rem; }
+  .fee-line { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; margin-top: 1rem; border: 1px dashed var(--line); border-radius: 0.75rem; font-size: 0.9375rem; }
+  .split { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+  @media (min-width: 56rem) { .split { grid-template-columns: 1.1fr 1fr; } }
+  .field { display: grid; gap: 0.375rem; margin-bottom: 1.25rem; }
+  .field label { font-weight: 500; font-size: 0.9375rem; }
+  .field output { font-variant-numeric: tabular-nums; color: var(--muted); }
+  input[type="range"] { width: 100%; accent-color: var(--ink); min-height: 2.75rem; }
+  .total { font-size: 3rem; font-weight: 600; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; margin: 0; }
+  .rows { display: grid; gap: 0.5rem; font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+  .rows div { display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 0.5rem; }
+  .catch { margin-top: 1.5rem; background: var(--tint); border-radius: 0.75rem; padding: 1.25rem; font-size: 0.9375rem; }
+  .catch h3 { margin: 0 0 0.5rem; font-size: 1rem; }
+  .proposed { font-size: 0.75rem; color: var(--muted); margin-top: 3rem; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<nav class="switcher" aria-label="Demo variants">
+  <strong>Variant</strong>
+  <button type="button" data-v="a" aria-pressed="true">A · Hybrid tiers</button>
+  <button type="button" data-v="b" aria-pressed="false">B · Per open role</button>
+  <button type="button" data-v="c" aria-pressed="false">C · Free + estimator</button>
+  <span class="note">Placeholder prices</span>
+</nav>
+
+<!-- A: hybrid tiers, after Pallet -->
+<main data-variant="a">
+  <h1>Pay a plan, then pay when you hire</h1>
+  <p class="lede">Every plan has a monthly price and a fee per successful hire. Pick by how many roles you're filling.</p>
+  <div class="grid">
+    <article class="card">
+      <h2>Free</h2>
+      <div class="price">$0 <small>/ month</small></div>
+      <div class="who"><b>Who is this for?</b>Founders making their first hire.</div>
+      <ul><li>Browse every vetted profile</li><li>1 open role</li><li>$4,000 per hire</li></ul>
+      <div class="first-hire">Your first hire costs <strong>$4,000</strong></div>
+      <a class="cta ghost" href="#">Start free</a>
+    </article>
+    <article class="card featured">
+      <h2>Growth</h2>
+      <div class="price">$300 <small>/ month + $2,500 per hire</small></div>
+      <div class="who"><b>Who is this for?</b>Teams filling 2–5 roles this year.</div>
+      <ul><li>Up to 3 open roles</li><li>Intro calls booked for you</li><li>$2,500 per hire</li></ul>
+      <div class="first-hire">Your first hire costs <strong>$2,800</strong> (one month + fee)</div>
+      <a class="cta" href="#">Start Growth</a>
+    </article>
+    <article class="card">
+      <h2>Scale</h2>
+      <div class="price">$900 <small>/ month + $1,500 per hire</small></div>
+      <div class="who"><b>Who is this for?</b>Companies hiring every month.</div>
+      <ul><li>Unlimited open roles</li><li>Dedicated talent partner</li><li>$1,500 per hire</li></ul>
+      <div class="first-hire">Your first hire costs <strong>$2,400</strong> (one month + fee)</div>
+      <a class="cta ghost" href="#">Talk to us</a>
+    </article>
+  </div>
+</main>
+
+<!-- B: per open role, after Jack & Jill -->
+<main data-variant="b" hidden>
+  <h1>Pay per open role</h1>
+  <p class="lede">You pay for each role while it's open, and a fee when someone's hired. Close the role and billing for it stops.</p>
+  <div class="toggle" role="group" aria-label="Billing period">
+    <button type="button" data-bill="annual" aria-pressed="true">Annual</button>
+    <button type="button" data-bill="monthly" aria-pressed="false">Monthly</button>
+  </div>
+  <p class="hint" id="bill-hint">Billed annually. Save $240 per open role each year.</p>
+  <div class="grid">
+    <article class="card">
+      <h2>Explore</h2>
+      <div class="price">$0 <small>/ open role / month</small></div>
+      <ul><li>Browse every vetted profile</li><li>1 open role</li></ul>
+      <a class="cta ghost" href="#">Start free</a>
+    </article>
+    <article class="card featured">
+      <h2>Hire</h2>
+      <div class="price"><span data-role-price>$80</span> <small>/ open role / month</small></div>
+      <ul><li>Unlimited open roles</li><li>Intro calls booked for you</li></ul>
+      <a class="cta" href="#">Open a role</a>
+    </article>
+    <article class="card">
+      <h2>Scale</h2>
+      <div class="price">Talk to us</div>
+      <ul><li>Volume pricing for 10+ roles</li><li>Dedicated talent partner</li></ul>
+      <a class="cta ghost" href="#">Talk to us</a>
+    </article>
+  </div>
+  <div class="fee-line"><span>When you hire, on any plan</span><strong>$2,500 per hire</strong></div>
+</main>
+
+<!-- C: free core + estimator, after Careswitch -->
+<main data-variant="c" hidden>
+  <h1>Free to browse. See your cost before you hire.</h1>
+  <p class="lede">Browsing and shortlisting are free. Tell us what you're hiring and we'll show the cheapest plan for it.</p>
+  <div class="split">
+    <section class="card" aria-labelledby="est-title">
+      <h2 id="est-title">Estimate your year</h2>
+      <div class="field">
+        <label for="roles">Roles open at once</label>
+        <input id="roles" type="range" min="1" max="10" value="2">
+        <output for="roles" id="roles-out">2 roles</output>
+      </div>
+      <div class="field">
+        <label for="hires">Hires this year</label>
+        <input id="hires" type="range" min="1" max="24" value="3">
+        <output for="hires" id="hires-out">3 hires</output>
+      </div>
+      <button type="button" class="cta ghost" id="reset">Reset</button>
+    </section>
+    <section class="card" aria-live="polite">
+      <div><span id="plan-name">Growth</span> plan · per year</div>
+      <p class="total" id="total">$11,100</p>
+      <div class="rows">
+        <div><span>Plan</span><span id="row-plan">$3,600</span></div>
+        <div><span>Hire fees</span><span id="row-fees">$7,500</span></div>
+        <div><span>Per hire, all in</span><span id="row-each">$3,700</span></div>
+      </div>
+      <a class="cta" href="#">Start free</a>
+    </section>
+  </div>
+  <div class="catch">
+    <h3>What's the catch? Is browsing really free?</h3>
+    <p>Yes. You only pay once you open more than one role or make a hire. No card needed to start.</p>
+  </div>
+</main>
+
+<p class="proposed" style="max-width:72rem;margin-inline:auto;padding:0 1rem 2rem">All copy and prices are proposed placeholders for comparing structure. Patterns: A from Pallet, B from Jack &amp; Jill, C from Careswitch (Landing Gallery, 2026-10-31).</p>
+
+<script>
+  const fmt = n => '$' + n.toLocaleString('en-US');
+  document.querySelectorAll('.switcher button').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('.switcher button').forEach(b => b.setAttribute('aria-pressed', b === btn));
+    document.querySelectorAll('main').forEach(m => m.hidden = m.dataset.variant !== btn.dataset.v);
+  }));
+
+  document.querySelectorAll('[data-bill]').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-bill]').forEach(b => b.setAttribute('aria-pressed', b === btn));
+    const annual = btn.dataset.bill === 'annual';
+    document.querySelector('[data-role-price]').textContent = annual ? '$80' : '$100';
+    document.getElementById('bill-hint').textContent = annual ? 'Billed annually. Save $240 per open role each year.' : 'Billed monthly. Cancel any time.';
+  }));
+
+  // Same plans as variant A; picks the cheapest plan that allows the open roles.
+  const plans = [
+    { name: 'Free', month: 0, fee: 4000, roles: 1 },
+    { name: 'Growth', month: 300, fee: 2500, roles: 3 },
+    { name: 'Scale', month: 900, fee: 1500, roles: Infinity },
+  ];
+  const roles = document.getElementById('roles'), hires = document.getElementById('hires');
+  function estimate() {
+    const r = +roles.value, h = +hires.value;
+    document.getElementById('roles-out').textContent = r + (r === 1 ? ' role' : ' roles');
+    document.getElementById('hires-out').textContent = h + (h === 1 ? ' hire' : ' hires');
+    const best = plans.filter(p => p.roles >= r)
+      .map(p => ({ ...p, plan: p.month * 12, fees: p.fee * h }))
+      .reduce((a, b) => (a.plan + a.fees <= b.plan + b.fees ? a : b));
+    const total = best.plan + best.fees;
+    document.getElementById('plan-name').textContent = best.name;
+    document.getElementById('total').textContent = fmt(total);
+    document.getElementById('row-plan').textContent = fmt(best.plan);
+    document.getElementById('row-fees').textContent = fmt(best.fees);
+    document.getElementById('row-each').textContent = fmt(Math.round(total / h));
+  }
+  roles.addEventListener('input', estimate);
+  hires.addEventListener('input', estimate);
+  document.getElementById('reset').addEventListener('click', () => { roles.value = 2; hires.value = 3; estimate(); });
+  estimate();
+</script>
+</body>
+</html>

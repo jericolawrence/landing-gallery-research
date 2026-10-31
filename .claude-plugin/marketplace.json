@@ -1,0 +1,14 @@
+{
+  "name": "landing-gallery-research",
+  "description": "Evidence-led landing page research through Landing Gallery for coding agents",
+  "owner": {
+    "name": "Jerico Lawrence"
+  },
+  "plugins": [
+    {
+      "name": "landing-gallery-research",
+      "source": "./",
+      "description": "Evidence-led landing page and marketing site research through Landing Gallery: interview, search, 4-5 references, 3 playable demos, then pick a direction"
+    }
+  ]
+}

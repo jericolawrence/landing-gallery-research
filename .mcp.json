@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "landing-gallery": {
+      "type": "http",
+      "url": "https://www.landing.gallery/api/mcp"
+    }
+  }
+}
